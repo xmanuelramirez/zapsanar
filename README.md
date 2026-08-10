@@ -53,13 +53,27 @@ En `src/data/productos.ts`. Cada producto necesita:
 | `id`           | Identificador único, sin espacios                          |
 | `nombre`       | Nombre comercial                                           |
 | `esencia`      | Dos o tres palabras que lo definen                         |
-| `familia`      | `tintura`, `aceite` o `cuidado`, alimenta el filtro        |
+| `familia`      | `tintura`, `aceite` o `cuidado`. Es la etiqueta de la tarjeta |
+| `necesidades`  | Para qué se busca. Alimenta los filtros. Ver abajo         |
 | `beneficios`   | Exactamente tres, uno por línea                            |
 | `aplicacion`   | Una sola frase                                             |
 | `oral`         | `true` si se toma: activa la advertencia de embarazo       |
 | `foto`         | Ruta dentro de `public/`, por ejemplo `productos/ruda.png` |
 | `presentacion` | Opcional. Si falta, no se dibuja ese recuadro              |
 | `tono`         | `[color claro, color profundo]` del halo y la sombra       |
+
+### Los filtros por necesidad
+
+Están en `src/data/necesidades.ts`: `mente`, `digestion`, `dolor`, `piel`,
+`cabello` y `defensas`. Un producto puede pertenecer a varias.
+
+La regla al asignarlas: **una necesidad solo se marca si se lee en alguno de
+los tres beneficios del producto**. Si alguien filtra por Dolor y abre una
+ficha donde ningún beneficio habla de dolor, el filtro parece roto.
+
+Si se agrega una necesidad nueva, hay que darle también su texto en
+`NECESIDADES` (el nombre del botón) y en `DESCRIPCIONES` (la línea que aparece
+bajo el título al seleccionarla).
 
 ### Fotos
 

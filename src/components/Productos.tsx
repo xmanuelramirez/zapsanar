@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import TarjetaProducto from './TarjetaProducto'
 import type { Producto } from '../data/productos'
-import { FILTROS, type Filtro } from '../data/familias'
+import { DESCRIPCIONES, NECESIDADES, type Filtro } from '../data/necesidades'
 
 const SEPARACION = 24
 
@@ -44,16 +44,20 @@ export default function Productos({
 
   return (
     <div className="flex h-full w-full flex-col px-[5vw] py-2">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
+        <div className="min-w-0">
           <span className="versalita text-savia">Catálogo</span>
-          <h2 className="mt-1 text-[clamp(1.5rem,3vw,2.4rem)] leading-tight text-tinta">
+          <h2 className="mt-1 text-[clamp(1.4rem,2.8vw,2.3rem)] leading-tight text-tinta">
             Lo que prepara Zapsanar
           </h2>
+          {/* Para "Todo" sobra: la descripcion repetiria el titulo */}
+          {filtro !== 'todos' && (
+            <p className="mt-1 text-xs text-tinta-suave">{DESCRIPCIONES[filtro]}</p>
+          )}
         </div>
 
-        <div className="vidrio flex gap-1 rounded-full p-1">
-          {(Object.keys(FILTROS) as Filtro[]).map((f) => (
+        <div className="vidrio flex max-w-full flex-wrap justify-end gap-1 rounded-3xl p-1">
+          {(Object.keys(NECESIDADES) as Filtro[]).map((f) => (
             <button
               key={f}
               onClick={() => setFiltro(f)}
@@ -67,7 +71,7 @@ export default function Productos({
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 />
               )}
-              <span className="relative">{FILTROS[f]}</span>
+              <span className="relative">{NECESIDADES[f]}</span>
             </button>
           ))}
         </div>

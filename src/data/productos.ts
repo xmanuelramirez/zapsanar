@@ -4,6 +4,8 @@
 // entrada aqui. La foto es obligatoria; conviene que sea un recorte con fondo
 // transparente para que flote igual que las demas.
 
+import type { Necesidad } from './necesidades'
+
 export type Familia = 'tintura' | 'aceite' | 'cuidado'
 
 export interface Producto {
@@ -12,6 +14,8 @@ export interface Producto {
   /** Subtitulo del catalogo: define al producto en dos o tres palabras */
   esencia: string
   familia: Familia
+  /** Para que se busca. Cada una tiene que leerse en los beneficios */
+  necesidades: Necesidad[]
   /** Exactamente tres, cada uno de una linea */
   beneficios: [string, string, string]
   /** Una sola frase */
@@ -30,6 +34,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Romero',
     esencia: 'Oxigenador cerebral',
     familia: 'tintura',
+    necesidades: ['mente'],
     beneficios: [
       'Potencia la memoria y la concentración',
       'Mejora la circulación sanguínea',
@@ -46,6 +51,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Manzanilla',
     esencia: 'Calmante y antiespasmódica',
     familia: 'tintura',
+    necesidades: ['mente', 'digestion', 'dolor'],
     beneficios: [
       'Alivia la digestión pesada',
       'Calma dolores menstruales',
@@ -62,6 +68,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Valeriana',
     esencia: 'Relajante natural',
     familia: 'tintura',
+    necesidades: ['mente', 'dolor'],
     beneficios: [
       'Induce un sueño profundo',
       'Reduce la ansiedad y las palpitaciones',
@@ -78,6 +85,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Caléndula',
     esencia: 'Cicatrizante',
     familia: 'tintura',
+    necesidades: ['piel', 'digestion', 'dolor'],
     beneficios: [
       'Desinflama irritaciones de la piel',
       'Ayuda con la acidez y la indigestión',
@@ -94,6 +102,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Ruda',
     esencia: 'Antiespasmódica',
     familia: 'tintura',
+    necesidades: ['digestion', 'dolor'],
     beneficios: [
       'Reduce espasmos y cólicos abdominales',
       'Regula el ciclo menstrual',
@@ -110,6 +119,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Menta',
     esencia: 'Analgésica y antiinflamatoria',
     familia: 'tintura',
+    necesidades: ['digestion', 'dolor', 'defensas'],
     beneficios: [
       'Calma náuseas, gases y espasmos',
       'Descongestiona las vías respiratorias',
@@ -126,6 +136,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Ortiga',
     esencia: 'Antiinflamatoria y nutricional',
     familia: 'tintura',
+    necesidades: ['defensas', 'cabello'],
     beneficios: [
       'Purifica la sangre y aporta minerales',
       'Diurética, protege hígado y riñón',
@@ -142,6 +153,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Cola de Caballo',
     esencia: 'Remineralizante y diurética',
     familia: 'tintura',
+    necesidades: ['defensas', 'cabello', 'dolor'],
     beneficios: [
       'Diurética, apoya en infecciones urinarias',
       'Remineraliza huesos, uñas y cabello',
@@ -158,6 +170,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Semilla de Papaya',
     esencia: 'Desparasitante',
     familia: 'tintura',
+    necesidades: ['digestion'],
     beneficios: [
       'Elimina lombrices intestinales',
       'La papaína ayuda a digerir proteínas',
@@ -174,6 +187,7 @@ export const productos: Producto[] = [
     nombre: 'Aceite Zanadol',
     esencia: 'Antiespasmódico',
     familia: 'aceite',
+    necesidades: ['dolor'],
     beneficios: [
       'Alivia dolor de espalda, cuello y músculos',
       'Estimula la circulación',
@@ -189,6 +203,7 @@ export const productos: Producto[] = [
     nombre: 'Aceite de Orégano',
     esencia: 'Antimicrobiano',
     familia: 'aceite',
+    necesidades: ['defensas'],
     beneficios: [
       'Combate bacterias y hongos',
       'Descongestiona las vías respiratorias',
@@ -204,6 +219,7 @@ export const productos: Producto[] = [
     nombre: 'Aceite Antiedad',
     esencia: 'A base de resveratrol',
     familia: 'aceite',
+    necesidades: ['piel'],
     beneficios: [
       'Antioxidante, previene arrugas',
       'Mejora la elasticidad de la piel',
@@ -219,6 +235,7 @@ export const productos: Producto[] = [
     nombre: 'Crema de Caléndula',
     esencia: 'Cicatrizante',
     familia: 'cuidado',
+    necesidades: ['piel'],
     beneficios: [
       'Cierra heridas, raspones y úlceras',
       'Calma quemaduras, golpes y picaduras',
@@ -234,6 +251,7 @@ export const productos: Producto[] = [
     nombre: 'Shampoo Natural',
     esencia: 'Cabello saludable',
     familia: 'cuidado',
+    necesidades: ['cabello'],
     beneficios: [
       'Equilibra el cuero cabelludo',
       'Libre de químicos agresivos',
@@ -249,6 +267,7 @@ export const productos: Producto[] = [
     nombre: 'Tónico Natural',
     esencia: 'Fuerza desde la raíz',
     familia: 'cuidado',
+    necesidades: ['cabello'],
     beneficios: [
       'Estimula el crecimiento del cabello',
       'Controla la grasa del cuero cabelludo',

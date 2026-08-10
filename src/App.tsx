@@ -8,7 +8,7 @@ import Uso from './components/Uso'
 import Contacto from './components/Contacto'
 import FichaProducto from './components/FichaProducto'
 import { productos } from './data/productos'
-import type { Filtro } from './data/familias'
+import type { Filtro } from './data/necesidades'
 
 const MODULOS = ['Inicio', 'Productos', 'Uso', 'Contacto'] as const
 const PRODUCTOS = 1
@@ -21,7 +21,10 @@ export default function App() {
   const bloqueo = useRef(false)
 
   const visibles = useMemo(
-    () => (filtro === 'todos' ? productos : productos.filter((p) => p.familia === filtro)),
+    () =>
+      filtro === 'todos'
+        ? productos
+        : productos.filter((p) => p.necesidades.includes(filtro)),
     [filtro],
   )
 
