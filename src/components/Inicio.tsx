@@ -1,24 +1,11 @@
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import ArteBotanico from './ArteBotanico'
-import { productos } from '../data/productos'
+import { motion } from 'framer-motion'
+import FotoProducto from './FotoProducto'
 import { enlaceWhatsapp, sitio } from '../data/sitio'
 
-const destacados = ['tonico-romero', 'tinte-henna', 'tonico-manzanilla']
-  .map((id) => productos.find((p) => p.id === id))
-  .filter((p): p is (typeof productos)[number] => Boolean(p))
+// Foto real del frasco de la marca. Vive en public/productos/.
+const PORTADA = 'productos/frasco.png'
 
 export default function Inicio({ irAProductos }: { irAProductos: () => void }) {
-  const [i, setI] = useState(0)
-
-  // Rotacion lenta del arte: el unico movimiento automatico de la portada.
-  useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % destacados.length), 6500)
-    return () => clearInterval(t)
-  }, [])
-
-  const actual = destacados[i]
-
   return (
     <div className="grid h-full w-full grid-cols-1 items-center gap-3 px-[6vw] md:grid-cols-[1.05fr_1fr] md:gap-10">
       <motion.div
@@ -27,12 +14,12 @@ export default function Inicio({ irAProductos }: { irAProductos: () => void }) {
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="order-2 max-w-xl md:order-1"
       >
-        <p className="versalita text-savia">Lotes pequeños · {sitio.ciudad}</p>
+        <p className="versalita text-savia">Tinturas madre · {sitio.zona}</p>
 
         <h1 className="mt-2 text-[clamp(1.9rem,5.4vw,4.4rem)] leading-[1.04] text-tinta md:mt-3">
-          Plantas que el
+          La esencia de
           <br />
-          cabello reconoce
+          la naturaleza
         </h1>
 
         <p className="mt-3 max-w-md text-[clamp(0.88rem,1.25vw,1.05rem)] leading-relaxed text-tinta-suave md:mt-4">
@@ -57,7 +44,7 @@ export default function Inicio({ irAProductos }: { irAProductos: () => void }) {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-tinta-suave md:mt-9 md:gap-x-8">
-          {['Sin amoniaco', 'Sin siliconas', 'Hecho a mano'].map((t) => (
+          {['Sin aditivos', 'Sin conservantes', 'Maceración lenta'].map((t) => (
             <span key={t} className="versalita">
               {t}
             </span>
@@ -65,43 +52,20 @@ export default function Inicio({ irAProductos }: { irAProductos: () => void }) {
         </div>
       </motion.div>
 
-      <div className="relative order-1 flex h-[28dvh] items-center justify-center md:order-2 md:h-[74dvh]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={actual.id}
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex h-full w-full flex-col items-center justify-center"
-          >
-            <ArteBotanico
-              arte={actual.arte}
-              tono={actual.tono}
-              id={`inicio-${actual.id}`}
-              className="h-full w-auto max-w-full"
-            />
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="absolute bottom-0 flex items-center gap-2">
-          {destacados.map((p, idx) => (
-            <button
-              key={p.id}
-              onClick={() => setI(idx)}
-              aria-label={`Mostrar ${p.nombre}`}
-              className="h-1.5 rounded-full transition-all duration-500"
-              style={{
-                width: idx === i ? 26 : 6,
-                background:
-                  idx === i
-                    ? 'var(--color-savia)'
-                    : 'color-mix(in srgb, var(--color-arena) 90%, transparent)',
-              }}
-            />
-          ))}
-        </div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        className="order-1 h-[28dvh] md:order-2 md:h-[74dvh]"
+      >
+        <FotoProducto
+          foto={PORTADA}
+          tono={['#F3EDE1', '#8A7A5E']}
+          alt="Frasco de tintura madre Zapsanar"
+          flotando
+          className="h-full w-full"
+        />
+      </motion.div>
     </div>
   )
 }

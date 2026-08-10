@@ -3,20 +3,24 @@
 
 export const sitio = {
   marca: 'Zapsanar',
-  lema: 'Tónicos y tintes naturales',
+  lema: 'El arte de sanar, naturalmente',
   descripcion:
-    'Fórmulas vivas de romero, ortiga y flores, preparadas en lotes pequeños para el cabello y el cuero cabelludo.',
+    'Tinturas madre maceradas en alcohol, sin aditivos ni conservantes. Esencias puras de plantas para el bienestar diario.',
 
   // Numero de WhatsApp en formato internacional, solo digitos.
-  // Ejemplo Mexico: 52 + LADA + numero.
-  whatsapp: '5214771234567',
+  // Colombia: 57 + numero.
+  whatsapp: '573158159065',
 
   // Texto base del mensaje. {producto} se reemplaza con el nombre del producto.
   mensajeWhatsapp: 'Hola Zapsanar, me interesa {producto}. ¿Me pueden dar información?',
 
-  instagram: 'https://instagram.com/zapsanar',
-  correo: 'hola@zapsanar.com',
-  ciudad: 'León, Guanajuato',
+  // Se muestran solo si tienen valor. Dejar vacio lo que no exista todavia.
+  instagram: '',
+  correo: '',
+  zona: 'Colombia',
+
+  // Aparece en cada producto de via oral y en el modulo de uso.
+  advertencia: 'No usar en embarazo ni lactancia. No sustituye un tratamiento médico.',
 } as const
 
 export function enlaceWhatsapp(producto?: string): string {

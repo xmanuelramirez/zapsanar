@@ -3,13 +3,14 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Fondo from './components/Fondo'
 import Marca from './components/Marca'
 import Inicio from './components/Inicio'
-import Productos, { type Filtro } from './components/Productos'
-import Ritual from './components/Ritual'
+import Productos from './components/Productos'
+import Uso from './components/Uso'
 import Contacto from './components/Contacto'
 import FichaProducto from './components/FichaProducto'
 import { productos } from './data/productos'
+import type { Filtro } from './data/familias'
 
-const MODULOS = ['Inicio', 'Productos', 'Ritual', 'Contacto'] as const
+const MODULOS = ['Inicio', 'Productos', 'Uso', 'Contacto'] as const
 const PRODUCTOS = 1
 
 export default function App() {
@@ -151,8 +152,8 @@ export default function App() {
             />
           </Seccion>
 
-          <Seccion nombre="Ritual">
-            <Ritual activo={modulo === 2} />
+          <Seccion nombre="Uso">
+            <Uso activo={modulo === 2} />
           </Seccion>
 
           <Seccion nombre="Contacto">

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import ArteBotanico from './ArteBotanico'
+import FotoProducto from './FotoProducto'
 import type { Producto } from '../data/productos'
+import { ETIQUETAS } from '../data/familias'
 
 interface Props {
   producto: Producto
@@ -25,32 +26,22 @@ export default function TarjetaProducto({ producto, activa, ancho, onClick }: Pr
       aria-label={producto.nombre}
     >
       <span className="versalita self-start text-savia">
-        {producto.familia === 'tonico' ? 'Tónico' : 'Tinte'}
+        {ETIQUETAS[producto.familia]}
       </span>
 
-      <div className="flex min-h-0 w-full flex-1 items-center justify-center py-2">
-        {producto.foto ? (
-          <img
-            src={producto.foto}
-            alt={producto.nombre}
-            className="h-full w-auto max-w-full object-contain sin-arrastre"
-            draggable={false}
-          />
-        ) : (
-          <ArteBotanico
-            arte={producto.arte}
-            tono={producto.tono}
-            id={`tarjeta-${producto.id}`}
-            className="h-full w-auto max-w-full"
-          />
-        )}
-      </div>
+      <FotoProducto
+        foto={producto.foto}
+        tono={producto.tono}
+        alt={producto.nombre}
+        flotando={activa}
+        className="min-h-0 w-full flex-1 py-2"
+      />
 
       <div className="w-full text-center">
-        <h3 className="text-[clamp(1.1rem,1.7vw,1.5rem)] leading-tight text-tinta">
+        <h3 className="text-[clamp(1rem,1.55vw,1.4rem)] leading-tight text-tinta">
           {producto.nombre}
         </h3>
-        <p className="mt-1 text-xs italic text-tinta-suave">{producto.planta}</p>
+        <p className="mt-1 text-xs text-tinta-suave">{producto.esencia}</p>
       </div>
 
       {/* Solo aparece en la tarjeta activa: invita a abrir la ficha */}

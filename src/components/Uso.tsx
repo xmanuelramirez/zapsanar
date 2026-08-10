@@ -1,48 +1,51 @@
 import { motion } from 'framer-motion'
+import { sitio } from '../data/sitio'
 
 interface Paso {
   n: string
   titulo: string
   texto: string
-  icono: 'cosecha' | 'macerado' | 'frasco' | 'ritual'
+  icono: 'gotero' | 'vaso' | 'calendario' | 'masaje'
 }
 
+// La pauta es la misma para todas las tinturas, asi que vive aqui y no se
+// repite en cada ficha.
 const pasos: Paso[] = [
   {
     n: '01',
-    titulo: 'Cosecha',
-    texto: 'Planta fresca, cortada en su punto y secada a la sombra.',
-    icono: 'cosecha',
+    titulo: 'Sublingual',
+    texto: '5 a 10 gotas bajo la lengua, directo del gotero.',
+    icono: 'gotero',
   },
   {
     n: '02',
-    titulo: 'Macerado',
-    texto: 'Semanas en reposo para que la planta suelte lo suyo, sin calor.',
-    icono: 'macerado',
+    titulo: 'En agua',
+    texto: 'O bien 15 a 20 gotas en medio vaso de agua.',
+    icono: 'vaso',
   },
   {
     n: '03',
-    titulo: 'Envasado',
-    texto: 'Lotes pequeños en vidrio ámbar, sin conservadores agresivos.',
-    icono: 'frasco',
+    titulo: 'Siete y siete',
+    texto: 'Siete días seguidos, siete de pausa, y se retoma.',
+    icono: 'calendario',
   },
   {
     n: '04',
-    titulo: 'Tu ritual',
-    texto: 'Unas gotas, masaje lento y constancia. El resto lo hace la planta.',
-    icono: 'ritual',
+    titulo: 'Uso externo',
+    texto: 'Masajeando la cabeza para caspa y seborrea.',
+    icono: 'masaje',
   },
 ]
 
-export default function Ritual({ activo }: { activo: boolean }) {
+export default function Uso({ activo }: { activo: boolean }) {
   return (
-    <div className="flex h-full w-full flex-col justify-center gap-7 px-[6vw]">
+    <div className="flex h-full w-full flex-col justify-center gap-6 px-[6vw]">
       <div className="max-w-xl">
-        <span className="versalita text-savia">El proceso</span>
+        <span className="versalita text-savia">Cómo se toma</span>
         <h2 className="mt-1 text-[clamp(1.6rem,3.4vw,2.8rem)] leading-tight text-tinta">
-          De la mata al frasco,
+          Unas gotas,
           <br />
-          sin atajos
+          con constancia
         </h2>
       </div>
 
@@ -70,6 +73,10 @@ export default function Ritual({ activo }: { activo: boolean }) {
           </motion.div>
         ))}
       </div>
+
+      <p className="max-w-2xl text-[0.78rem] leading-snug text-tierra">
+        {sitio.advertencia}
+      </p>
     </div>
   )
 }
@@ -86,36 +93,37 @@ function Icono({ tipo }: { tipo: Paso['icono'] }) {
     'aria-hidden': true,
   }
 
-  if (tipo === 'cosecha')
+  if (tipo === 'gotero')
     return (
       <svg {...comun}>
-        <path d="M16 28 C 16 18, 20 10, 27 6 C 28 15, 23 24, 16 28 Z" />
-        <path d="M16 28 C 15 21, 11 15, 5 12" />
+        <path d="M14 4 h4 v10 h-4 z" />
+        <path d="M13 14 h6 v10 a3 3 0 0 1 -6 0 z" />
+        <path d="M16 26 v3" />
+        <circle cx="16" cy="30" r="1.4" />
       </svg>
     )
 
-  if (tipo === 'macerado')
+  if (tipo === 'vaso')
     return (
       <svg {...comun}>
-        <path d="M9 5 h14 v4 l-4 5 v13 a2 2 0 0 1 -2 2 h-2 a2 2 0 0 1 -2 -2 v-13 l-4 -5 z" />
-        <path d="M11 20 h10" />
-        <circle cx="14" cy="24" r="1" />
-        <circle cx="18" cy="22" r="1" />
+        <path d="M9 6 h14 l-2 21 a2 2 0 0 1 -2 2 h-6 a2 2 0 0 1 -2 -2 z" />
+        <path d="M10 16 c 3 2 9 -2 12 0" />
       </svg>
     )
 
-  if (tipo === 'frasco')
+  if (tipo === 'calendario')
     return (
       <svg {...comun}>
-        <path d="M13 4 h6 v4 c0 2 4 3 4 8 v12 a2 2 0 0 1 -2 2 h-10 a2 2 0 0 1 -2 -2 v-12 c0 -5 4 -6 4 -8 z" />
-        <path d="M11 18 h10" />
+        <rect x="5" y="8" width="22" height="19" rx="3" />
+        <path d="M5 14 h22 M11 5 v6 M21 5 v6" />
+        <circle cx="12" cy="20" r="1.2" />
+        <circle cx="20" cy="20" r="1.2" />
       </svg>
     )
 
   return (
     <svg {...comun}>
-      <circle cx="16" cy="16" r="11" />
-      <path d="M16 8 v8 l5 3" />
+      <path d="M16 27 c -6 -4 -10 -8 -10 -13 a5 5 0 0 1 10 -2 a5 5 0 0 1 10 2 c0 5 -4 9 -10 13 z" />
     </svg>
   )
 }

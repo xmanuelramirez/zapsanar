@@ -1,135 +1,262 @@
-// Catalogo de productos.
+// Catalogo de Zapsanar. Los datos salen del catalogo en PDF de la marca.
 //
-// Para sustituir el arte generado por una foto real:
-//   1. Guarda la imagen en `public/productos/` (ej. romero.jpg)
-//   2. Agrega `foto: 'productos/romero.jpg'` al producto
-// Mientras no exista `foto`, se dibuja la ilustracion botanica de `arte`.
+// Para agregar un producto: pon su PNG en `public/productos/` y agrega una
+// entrada aqui. La foto es obligatoria; conviene que sea un recorte con fondo
+// transparente para que flote igual que las demas.
 
-export type Arte = 'ramas' | 'hoja' | 'flor' | 'gota' | 'raiz'
-export type Familia = 'tonico' | 'tinte'
+export type Familia = 'tintura' | 'aceite' | 'cuidado'
 
 export interface Producto {
   id: string
   nombre: string
-  planta: string
-  familia: Familia
+  /** Subtitulo del catalogo: define al producto en dos o tres palabras */
   esencia: string
+  familia: Familia
+  /** Exactamente tres, cada uno de una linea */
   beneficios: [string, string, string]
-  modoUso: string
-  presentacion: string
-  arte: Arte
-  /** Par de colores del arte: [claro, profundo] */
+  /** Una sola frase */
+  aplicacion: string
+  /** Se toma por via oral: activa la advertencia de embarazo y lactancia */
+  oral: boolean
+  foto: string
+  presentacion?: string
+  /** Par de colores del halo detras de la foto: [claro, profundo] */
   tono: [string, string]
-  foto?: string
 }
 
 export const productos: Producto[] = [
   {
-    id: 'tonico-romero',
-    nombre: 'Tónico de Romero',
-    planta: 'Rosmarinus officinalis',
-    familia: 'tonico',
-    esencia: 'Despierta el folículo y devuelve fuerza a la raíz.',
-    beneficios: ['Estimula el crecimiento', 'Fortalece la fibra', 'Refresca el cuero cabelludo'],
-    modoUso: 'Rocía sobre el cuero cabelludo seco y masajea. Sin enjuague, día por medio.',
-    presentacion: 'Frasco 120 ml',
-    arte: 'ramas',
+    id: 'tintura-romero',
+    nombre: 'Tintura de Romero',
+    esencia: 'Oxigenador cerebral',
+    familia: 'tintura',
+    beneficios: [
+      'Potencia la memoria y la concentración',
+      'Mejora la circulación sanguínea',
+      'Reduce el estrés y la fatiga mental',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, siete días seguidos.',
+    oral: true,
+    foto: 'productos/romero.png',
+    presentacion: 'Frasco de vidrio 30 ml',
     tono: ['#DCE8DA', '#4C7A5A'],
   },
   {
-    id: 'tonico-ortiga',
-    nombre: 'Tónico de Ortiga',
-    planta: 'Urtica dioica',
-    familia: 'tonico',
-    esencia: 'Equilibra la grasa y sostiene el cabello que se cae.',
-    beneficios: ['Reduce la caída', 'Controla el exceso de grasa', 'Aporta minerales'],
-    modoUso: 'Aplica por secciones después del lavado. Masajea dos minutos.',
-    presentacion: 'Frasco 120 ml',
-    arte: 'hoja',
-    tono: ['#DEE9D6', '#3F6B4E'],
-  },
-  {
-    id: 'tonico-manzanilla',
-    nombre: 'Tónico de Manzanilla',
-    planta: 'Matricaria chamomilla',
-    familia: 'tonico',
-    esencia: 'Aclara con luz de sol y calma la piel sensible.',
-    beneficios: ['Realza tonos claros', 'Calma la irritación', 'Suaviza al peinar'],
-    modoUso: 'Rocía de medios a puntas y deja secar al aire, de preferencia con luz natural.',
-    presentacion: 'Frasco 120 ml',
-    arte: 'flor',
+    id: 'tintura-manzanilla',
+    nombre: 'Tintura de Manzanilla',
+    esencia: 'Calmante y antiespasmódica',
+    familia: 'tintura',
+    beneficios: [
+      'Alivia la digestión pesada',
+      'Calma dolores menstruales',
+      'Favorece un sueño reparador',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, siete días seguidos.',
+    oral: true,
+    foto: 'productos/manzanilla.png',
+    presentacion: 'Frasco de vidrio 30 ml',
     tono: ['#FBF0D8', '#C8A24A'],
   },
   {
-    id: 'tonico-calendula',
-    nombre: 'Tónico de Caléndula',
-    planta: 'Calendula officinalis',
-    familia: 'tonico',
-    esencia: 'Repara el cuero cabelludo que arde o descama.',
-    beneficios: ['Alivia la resequedad', 'Reduce la descamación', 'Regenera la piel'],
-    modoUso: 'Aplica directo en la zona sensible, sin enjuague, hasta tres veces por semana.',
-    presentacion: 'Frasco 120 ml',
-    arte: 'flor',
+    id: 'tintura-valeriana',
+    nombre: 'Tintura de Valeriana',
+    esencia: 'Relajante natural',
+    familia: 'tintura',
+    beneficios: [
+      'Induce un sueño profundo',
+      'Reduce la ansiedad y las palpitaciones',
+      'Relaja los músculos y calma calambres',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales antes de dormir.',
+    oral: true,
+    foto: 'productos/valeriana.png',
+    presentacion: 'Frasco de vidrio 30 ml',
+    tono: ['#EFE7F0', '#8E7BA6'],
+  },
+  {
+    id: 'tintura-calendula',
+    nombre: 'Tintura de Caléndula',
+    esencia: 'Cicatrizante',
+    familia: 'tintura',
+    beneficios: [
+      'Desinflama irritaciones de la piel',
+      'Ayuda con la acidez y la indigestión',
+      'Alivia y regula el dolor menstrual',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, o diluida para gárgaras.',
+    oral: true,
+    foto: 'productos/calendula.png',
+    presentacion: 'Frasco de vidrio 30 ml',
     tono: ['#FBE6D2', '#D08A3E'],
   },
   {
-    id: 'tonico-sabila',
-    nombre: 'Tónico de Sábila',
-    planta: 'Aloe vera',
-    familia: 'tonico',
-    esencia: 'Hidratación ligera que no apelmaza el rizo.',
-    beneficios: ['Hidrata sin peso', 'Define la onda', 'Sella la cutícula'],
-    modoUso: 'Sobre cabello húmedo, de medios a puntas. Peina y deja secar.',
-    presentacion: 'Frasco 150 ml',
-    arte: 'gota',
+    id: 'tintura-ruda',
+    nombre: 'Tintura de Ruda',
+    esencia: 'Antiespasmódica',
+    familia: 'tintura',
+    beneficios: [
+      'Reduce espasmos y cólicos abdominales',
+      'Regula el ciclo menstrual',
+      'Mejora la digestión y los gases',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, siete días seguidos.',
+    oral: true,
+    foto: 'productos/ruda.png',
+    presentacion: 'Frasco de vidrio 30 ml',
+    tono: ['#EDF0D4', '#8A9A3C'],
+  },
+  {
+    id: 'tintura-menta',
+    nombre: 'Tintura de Menta',
+    esencia: 'Analgésica y antiinflamatoria',
+    familia: 'tintura',
+    beneficios: [
+      'Calma náuseas, gases y espasmos',
+      'Descongestiona las vías respiratorias',
+      'Alivia el dolor de cabeza',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, siete días seguidos.',
+    oral: true,
+    foto: 'productos/menta.png',
+    presentacion: 'Frasco de vidrio 30 ml',
     tono: ['#DCEDE4', '#3E8168'],
   },
   {
-    id: 'tinte-nogal',
-    nombre: 'Tinte de Nogal',
-    planta: 'Juglans regia',
-    familia: 'tinte',
-    esencia: 'Castaño profundo, sin amoniaco ni oxidantes.',
-    beneficios: ['Cubre canas gradualmente', 'Tono castaño cálido', 'No reseca la fibra'],
-    modoUso: 'Mezcla con agua tibia hasta formar pasta. Deja actuar 60 minutos y enjuaga.',
-    presentacion: 'Polvo 100 g',
-    arte: 'raiz',
-    tono: ['#EADDCB', '#7A5233'],
+    id: 'tintura-ortiga',
+    nombre: 'Tintura de Ortiga',
+    esencia: 'Antiinflamatoria y nutricional',
+    familia: 'tintura',
+    beneficios: [
+      'Purifica la sangre y aporta minerales',
+      'Diurética, protege hígado y riñón',
+      'Frena la caída del cabello y la caspa',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, siete días seguidos.',
+    oral: true,
+    foto: 'productos/ortiga.png',
+    presentacion: 'Frasco de vidrio 30 ml',
+    tono: ['#DEE9D6', '#3F6B4E'],
   },
   {
-    id: 'tinte-henna',
-    nombre: 'Tinte de Henna',
-    planta: 'Lawsonia inermis',
-    familia: 'tinte',
-    esencia: 'Cobrizo vivo que además engrosa el cabello.',
-    beneficios: ['Tono cobrizo intenso', 'Da cuerpo y brillo', 'Cubre canas'],
-    modoUso: 'Pasta con agua tibia y limón. Reposa 4 horas antes de aplicar. Actúa 90 minutos.',
-    presentacion: 'Polvo 100 g',
-    arte: 'hoja',
-    tono: ['#F3DFC9', '#A6552C'],
+    id: 'tintura-cola-de-caballo',
+    nombre: 'Tintura de Cola de Caballo',
+    esencia: 'Remineralizante y diurética',
+    familia: 'tintura',
+    beneficios: [
+      'Diurética, apoya en infecciones urinarias',
+      'Remineraliza huesos, uñas y cabello',
+      'Libera el exceso de ácido úrico',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, siete días seguidos.',
+    oral: true,
+    foto: 'productos/cola-de-caballo.png',
+    presentacion: 'Frasco de vidrio 30 ml',
+    tono: ['#DDEBDD', '#4F8464'],
   },
   {
-    id: 'tinte-indigo',
-    nombre: 'Tinte de Índigo',
-    planta: 'Indigofera tinctoria',
-    familia: 'tinte',
-    esencia: 'Negro azulado que se aplica después de la henna.',
-    beneficios: ['Oscurece sin químicos', 'Tono negro azulado', 'Compatible con henna'],
-    modoUso: 'Aplica sobre cabello ya tratado con henna. Deja actuar 60 minutos.',
-    presentacion: 'Polvo 100 g',
-    arte: 'raiz',
-    tono: ['#DEE2EC', '#3D4B6B'],
+    id: 'tintura-semilla-papaya',
+    nombre: 'Tintura de Semilla de Papaya',
+    esencia: 'Desparasitante',
+    familia: 'tintura',
+    beneficios: [
+      'Elimina lombrices intestinales',
+      'La papaína ayuda a digerir proteínas',
+      'Alivia gases y cólicos',
+    ],
+    aplicacion: '20 a 30 gotas en agua, 30 minutos antes de comer.',
+    oral: true,
+    foto: 'productos/papaya.png',
+    presentacion: 'Frasco de vidrio 30 ml',
+    tono: ['#FCE3CD', '#DE7F3A'],
   },
   {
-    id: 'tonico-lavanda',
-    nombre: 'Tónico de Lavanda',
-    planta: 'Lavandula angustifolia',
-    familia: 'tonico',
-    esencia: 'Aroma que baja el ritmo al final del día.',
-    beneficios: ['Relaja el cuero cabelludo', 'Aroma prolongado', 'Equilibra el pH'],
-    modoUso: 'Rocía antes de dormir y masajea con las yemas de los dedos.',
-    presentacion: 'Frasco 120 ml',
-    arte: 'ramas',
-    tono: ['#E7E2F0', '#6C5E93'],
+    id: 'aceite-zanadol',
+    nombre: 'Aceite Zanadol',
+    esencia: 'Antiespasmódico',
+    familia: 'aceite',
+    beneficios: [
+      'Alivia dolor de espalda, cuello y músculos',
+      'Estimula la circulación',
+      'Desinflama dolores reumáticos y articulares',
+    ],
+    aplicacion: 'Masajear la zona adolorida hasta absorber.',
+    oral: false,
+    foto: 'productos/zanadol.png',
+    tono: ['#E3EAD9', '#5C7D45'],
+  },
+  {
+    id: 'aceite-oregano',
+    nombre: 'Aceite de Orégano',
+    esencia: 'Antimicrobiano',
+    familia: 'aceite',
+    beneficios: [
+      'Combate bacterias y hongos',
+      'Descongestiona las vías respiratorias',
+      'Antioxidante y antiinflamatorio',
+    ],
+    aplicacion: '5 a 10 gotas sublinguales, siete días seguidos.',
+    oral: true,
+    foto: 'productos/oregano.png',
+    tono: ['#E4EDDA', '#57793F'],
+  },
+  {
+    id: 'aceite-antiedad',
+    nombre: 'Aceite Antiedad',
+    esencia: 'A base de resveratrol',
+    familia: 'aceite',
+    beneficios: [
+      'Antioxidante, previene arrugas',
+      'Mejora la elasticidad de la piel',
+      'Ligero, no tapa los poros',
+    ],
+    aplicacion: 'Unas gotas sobre el rostro limpio, de noche.',
+    oral: false,
+    foto: 'productos/antiedad.png',
+    tono: ['#F2E4D6', '#9B6B4A'],
+  },
+  {
+    id: 'crema-calendula',
+    nombre: 'Crema de Caléndula',
+    esencia: 'Cicatrizante',
+    familia: 'cuidado',
+    beneficios: [
+      'Cierra heridas, raspones y úlceras',
+      'Calma quemaduras, golpes y picaduras',
+      'Hidrata la piel seca y sensible',
+    ],
+    aplicacion: 'Aplicar en la zona afectada dos veces al día.',
+    oral: false,
+    foto: 'productos/calendula.png',
+    tono: ['#FBE6D2', '#D08A3E'],
+  },
+  {
+    id: 'shampoo-natural',
+    nombre: 'Shampoo Natural',
+    esencia: 'Cabello saludable',
+    familia: 'cuidado',
+    beneficios: [
+      'Equilibra el cuero cabelludo',
+      'Libre de químicos agresivos',
+      'Ideal para cuero cabelludo sensible',
+    ],
+    aplicacion: 'Masajear el cuero cabelludo y enjuagar.',
+    oral: false,
+    foto: 'productos/cabello.png',
+    tono: ['#DEE9DC', '#4C7A5A'],
+  },
+  {
+    id: 'tonico-natural',
+    nombre: 'Tónico Natural',
+    esencia: 'Fuerza desde la raíz',
+    familia: 'cuidado',
+    beneficios: [
+      'Estimula el crecimiento del cabello',
+      'Controla la grasa del cuero cabelludo',
+      'Previene la caída y da grosor',
+    ],
+    aplicacion: 'Aplicar en el cuero cabelludo, sin enjuagar.',
+    oral: false,
+    foto: 'productos/cabello.png',
+    tono: ['#E6EEDF', '#5F8A5F'],
   },
 ]

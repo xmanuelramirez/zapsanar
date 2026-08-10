@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
-import ArteBotanico from './ArteBotanico'
+import FotoProducto from './FotoProducto'
 import type { Producto } from '../data/productos'
-import { enlaceWhatsapp } from '../data/sitio'
+import { ETIQUETAS } from '../data/familias'
+import { enlaceWhatsapp, sitio } from '../data/sitio'
 
 interface Props {
   producto: Producto
@@ -38,48 +39,29 @@ export default function FichaProducto({
         }}
         className="vidrio-hondo relative grid h-[82dvh] w-full max-w-6xl grid-rows-[minmax(0,0.62fr)_minmax(0,1.38fr)] overflow-hidden rounded-[32px] md:h-[74dvh] md:grid-cols-[0.95fr_1.05fr] md:grid-rows-1"
       >
-        {/* Cara visual */}
-        <div
-          className="relative flex min-h-0 items-center justify-center p-4"
-          style={{
-            background: `radial-gradient(ellipse at 50% 40%, ${producto.tono[0]}88 0%, transparent 70%)`,
-          }}
-        >
-          {producto.foto ? (
-            <img
-              src={producto.foto}
-              alt={producto.nombre}
-              className="h-full w-auto max-w-full object-contain"
-            />
-          ) : (
-            <ArteBotanico
-              arte={producto.arte}
-              tono={producto.tono}
-              id={`ficha-${producto.id}`}
-              className="h-full w-auto max-w-full"
-            />
-          )}
-        </div>
+        <FotoProducto
+          foto={producto.foto}
+          tono={producto.tono}
+          alt={producto.nombre}
+          flotando
+          className="min-h-0 p-4 md:p-6"
+        />
 
         {/* Cara de texto: corta, jerarquizada */}
         <div className="flex min-h-0 flex-col justify-center gap-2.5 p-4 md:gap-4 md:p-9">
           <div>
-            <span className="versalita text-savia">
-              {producto.familia === 'tonico' ? 'Tónico capilar' : 'Tinte vegetal'}
-            </span>
-            <h2 className="mt-2 text-[clamp(1.7rem,3.2vw,2.9rem)] leading-tight text-tinta">
+            <span className="versalita text-savia">{ETIQUETAS[producto.familia]}</span>
+            <h2 className="mt-2 text-[clamp(1.6rem,3vw,2.7rem)] leading-tight text-tinta">
               {producto.nombre}
             </h2>
-            <p className="mt-1 text-sm italic text-tinta-suave">{producto.planta}</p>
+            <p className="mt-1 text-[clamp(0.9rem,1.3vw,1.1rem)] text-tinta-suave">
+              {producto.esencia}
+            </p>
           </div>
-
-          <p className="max-w-md text-[clamp(0.95rem,1.3vw,1.1rem)] leading-relaxed text-tinta">
-            {producto.esencia}
-          </p>
 
           <ul className="flex flex-col gap-2">
             {producto.beneficios.map((b) => (
-              <li key={b} className="flex items-center gap-3 text-sm text-tinta-suave">
+              <li key={b} className="flex items-center gap-3 text-sm text-tinta">
                 <span
                   className="h-1.5 w-1.5 shrink-0 rounded-full"
                   style={{ background: producto.tono[1] }}
@@ -90,9 +72,15 @@ export default function FichaProducto({
           </ul>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <Dato titulo="Modo de uso" cuerpo={producto.modoUso} />
-            <Dato titulo="Presentación" cuerpo={producto.presentacion} />
+            <Dato titulo="Cómo se usa" cuerpo={producto.aplicacion} />
+            {producto.presentacion && (
+              <Dato titulo="Presentación" cuerpo={producto.presentacion} />
+            )}
           </div>
+
+          {producto.oral && (
+            <p className="text-[0.7rem] leading-snug text-tierra">{sitio.advertencia}</p>
+          )}
 
           <a
             href={enlaceWhatsapp(producto.nombre)}

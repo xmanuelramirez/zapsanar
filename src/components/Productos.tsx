@@ -2,14 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import TarjetaProducto from './TarjetaProducto'
 import type { Producto } from '../data/productos'
-
-export type Filtro = 'todos' | 'tonico' | 'tinte'
-
-const ETIQUETAS: Record<Filtro, string> = {
-  todos: 'Todo',
-  tonico: 'Tónicos',
-  tinte: 'Tintes',
-}
+import { FILTROS, type Filtro } from '../data/familias'
 
 const SEPARACION = 24
 
@@ -60,11 +53,11 @@ export default function Productos({
         </div>
 
         <div className="vidrio flex gap-1 rounded-full p-1">
-          {(Object.keys(ETIQUETAS) as Filtro[]).map((f) => (
+          {(Object.keys(FILTROS) as Filtro[]).map((f) => (
             <button
               key={f}
               onClick={() => setFiltro(f)}
-              className="relative rounded-full px-4 py-1.5 text-xs tracking-wide transition-colors duration-300"
+              className="relative rounded-full px-3 py-1.5 text-xs tracking-wide transition-colors duration-300 sm:px-4"
               style={{ color: filtro === f ? '#fff' : 'var(--color-tinta-suave)' }}
             >
               {filtro === f && (
@@ -74,7 +67,7 @@ export default function Productos({
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 />
               )}
-              <span className="relative">{ETIQUETAS[f]}</span>
+              <span className="relative">{FILTROS[f]}</span>
             </button>
           ))}
         </div>
@@ -114,7 +107,7 @@ export default function Productos({
       <div className="flex items-center justify-between gap-4 pt-1">
         <div className="min-w-0">
           <p className="truncate text-sm text-tinta-suave">
-            {actual ? actual.esencia : 'Sin productos en esta familia.'}
+            {actual ? actual.beneficios[0] : 'Sin productos en esta familia.'}
           </p>
         </div>
 

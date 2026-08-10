@@ -12,13 +12,13 @@ export default function Contacto({ activo }: { activo: boolean }) {
       >
         <span className="versalita text-savia">Pedidos</span>
         <h2 className="mt-2 text-[clamp(1.9rem,4.6vw,3.6rem)] leading-[1.08] text-tinta">
-          Cuéntanos qué necesita
+          Cuéntanos qué
           <br />
-          tu cabello
+          necesitas
         </h2>
         <p className="mx-auto mt-4 max-w-md text-[clamp(0.9rem,1.25vw,1.05rem)] leading-relaxed text-tinta-suave">
-          Respondemos por WhatsApp y armamos el pedido contigo. Envíos desde{' '}
-          {sitio.ciudad}.
+          Respondemos por WhatsApp y armamos el pedido contigo. Envíos en{' '}
+          {sitio.zona}.
         </p>
       </motion.div>
 
@@ -34,14 +34,21 @@ export default function Contacto({ activo }: { activo: boolean }) {
         <span className="text-sm tracking-wide">Escribir por WhatsApp</span>
       </a>
 
-      <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-        <Enlace href={sitio.instagram} etiqueta="Instagram" valor="@zapsanar" />
-        <Enlace href={`mailto:${sitio.correo}`} etiqueta="Correo" valor={sitio.correo} />
-        <div className="text-left">
-          <div className="versalita text-tinta-suave">Taller</div>
-          <div className="text-sm text-tinta">{sitio.ciudad}</div>
+      {/* Solo se muestran los canales que existen: ver src/data/sitio.ts */}
+      {(sitio.instagram || sitio.correo) && (
+        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          {sitio.instagram && (
+            <Enlace href={sitio.instagram} etiqueta="Instagram" valor="@zapsanar" />
+          )}
+          {sitio.correo && (
+            <Enlace href={`mailto:${sitio.correo}`} etiqueta="Correo" valor={sitio.correo} />
+          )}
         </div>
-      </div>
+      )}
+
+      <p className="max-w-md text-[0.72rem] leading-snug text-tinta-suave">
+        {sitio.advertencia}
+      </p>
     </div>
   )
 }
