@@ -1,24 +1,26 @@
 # Zapsanar
 
-Vitrina de tónicos y tintes naturales. Una sola pantalla, sin scroll: los
-módulos y los productos se recorren en carrusel.
+Vitrina de tinturas madre, aceites y productos de cuidado. Una sola pantalla,
+sin scroll: los módulos y los productos se recorren en carrusel.
 
 ## Estructura
 
 ```
 src/
   App.tsx                 Lienzo de 100dvh, navegación entre módulos y teclado
-  data/sitio.ts           Marca, WhatsApp, redes, ciudad
+  data/sitio.ts           Marca, WhatsApp, zona, advertencia
   data/productos.ts       Catálogo (lo único que se edita a diario)
+  data/familias.ts        Nombres de las familias y de los filtros
   components/
     Inicio.tsx            Portada
     Productos.tsx         Carrusel del catálogo
     TarjetaProducto.tsx   Tarjeta individual
     FichaProducto.tsx     Ficha ampliada de un producto
-    Ritual.tsx            Proceso de elaboración
+    FotoProducto.tsx      Planta suspendida: halo, sombra y vaivén
+    Uso.tsx               Dosis y pauta común de las tinturas
     Contacto.tsx          Cierre y pedidos
-    ArteBotanico.tsx      Ilustración SVG por producto
     Fondo.tsx / Marca.tsx Atmósfera y logotipo
+public/productos/         PNG de cada producto, fondo transparente
 ```
 
 ## Desarrollo
@@ -35,34 +37,42 @@ npm run dev
 ### Cambiar el número de WhatsApp
 
 En `src/data/sitio.ts`, campo `whatsapp`: formato internacional, solo dígitos.
-Para México es `52` + `1` + lada + número. Ese mismo archivo tiene el correo,
-Instagram y la ciudad.
+Colombia es `57` + el número. Ahí mismo están la zona de envíos y la
+advertencia legal.
+
+`instagram` y `correo` están vacíos a propósito: mientras no tengan valor, ese
+bloque no se dibuja en el módulo de contacto. Basta con llenarlos para que
+aparezca.
 
 ### Agregar o cambiar un producto
 
 En `src/data/productos.ts`. Cada producto necesita:
 
-| Campo          | Qué es                                                     |
-| -------------- | ---------------------------------------------------------- |
+| Campo          | Qué es                                                    |
+| -------------- | --------------------------------------------------------- |
 | `id`           | Identificador único, sin espacios                          |
 | `nombre`       | Nombre comercial                                           |
-| `planta`       | Nombre botánico, va en cursiva bajo el nombre              |
-| `familia`      | `tonico` o `tinte`, alimenta el filtro                     |
-| `esencia`      | Una sola frase, es lo primero que se lee                   |
-| `beneficios`   | Exactamente tres                                           |
-| `modoUso`      | Instrucción corta                                          |
-| `presentacion` | Envase y contenido                                         |
-| `arte`         | `ramas`, `hoja`, `flor`, `gota` o `raiz`                   |
-| `tono`         | `[color claro, color profundo]` de la ilustración          |
+| `esencia`      | Dos o tres palabras que lo definen                         |
+| `familia`      | `tintura`, `aceite` o `cuidado`, alimenta el filtro        |
+| `beneficios`   | Exactamente tres, uno por línea                            |
+| `aplicacion`   | Una sola frase                                             |
+| `oral`         | `true` si se toma: activa la advertencia de embarazo       |
+| `foto`         | Ruta dentro de `public/`, por ejemplo `productos/ruda.png` |
+| `presentacion` | Opcional. Si falta, no se dibuja ese recuadro              |
+| `tono`         | `[color claro, color profundo]` del halo y la sombra       |
 
-### Poner fotos reales en lugar de las ilustraciones
+### Fotos
 
-1. Guarda la imagen en `public/productos/` (por ejemplo `romero.jpg`).
-2. Agrega la línea `foto: 'productos/romero.jpg'` a ese producto.
+Las imágenes salen del catálogo en PDF de la marca. Van en `public/productos/`
+como PNG de 620x620 con fondo transparente, pesan entre 14 y 121 KB cada una.
 
-Mientras un producto no tenga `foto`, se dibuja su ilustración botánica. Se
-puede ir migrando de uno en uno. Conviene que las fotos sean cuadradas o
-verticales y con fondo claro.
+Para que una foto nueva se vea igual que las demás necesita fondo transparente
+y la planta centrada. Si solo hay una fotografía con fondo, se puede enmascarar
+en círculo difuminado, que es lo que se hizo con orégano, cola de caballo y
+aceite antiedad.
+
+Pendiente: `shampoo-natural` y `tonico-natural` comparten `cabello.png` porque
+el catálogo original usa la misma foto para los dos.
 
 ## Publicar
 
@@ -91,7 +101,14 @@ en Settings → Pages.
 - **Gestos con `onPanEnd`, no con `drag`.** `drag` captura el puntero en
   pantallas táctiles y el toque sobre una tarjeta nunca llegaría a abrir su
   ficha.
+- **Volumen sin 3D.** Las plantas son PNG planos. Lo que les da cuerpo es el
+  halo de su propio color, una sombra proyectada que vive separada de la imagen
+  y un vaivén de siete segundos. Al separar la sombra, esta se queda en el piso
+  mientras la planta sube.
 - **Cremas translúcidas.** La clase `.vidrio` mezcla color con transparencia y
   desenfoque en lugar de usar bloques sólidos.
-- **Animaciones sobrias.** Transiciones largas y suaves, sin rebotes. Se
-  desactivan solas si el sistema pide menos movimiento.
+- **La pauta va una sola vez.** Todas las tinturas comparten dosis y ciclo, así
+  que eso vive en el módulo Uso y no se repite en las quince fichas.
+- **Advertencia visible.** El catálogo original marca que no se use en embarazo
+  ni lactancia. Esa línea acompaña a cada producto de vía oral, al módulo Uso y
+  al de contacto.
