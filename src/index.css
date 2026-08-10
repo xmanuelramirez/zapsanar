@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Base blanca y cremas translucidas */
+  --color-lienzo: #ffffff;
+  --color-crema: #fbf7f1;
+  --color-crema-2: #f6efe4;
+  --color-arena: #ece0cf;
+
+  /* Verde naturaleza, primario */
+  --color-savia: #4c7a5a;
+  --color-savia-claro: #7ba38a;
+  --color-savia-hondo: #2f5741;
+
+  /* Acento calido, muy tenue */
+  --color-tierra: #c98a63;
+
+  /* Tinta */
+  --color-tinta: #35302a;
+  --color-tinta-suave: #6f675d;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  html {
+    /* La app es de un solo lienzo: nunca hay scroll de pagina. */
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-lienzo);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-savia);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  /* Cristal crema: nunca un bloque solido, siempre luz atravesando. */
+  .vidrio {
+    background: color-mix(in srgb, var(--color-crema) 62%, transparent);
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
+    border: 1px solid color-mix(in srgb, var(--color-arena) 55%, transparent);
+  }
+
+  .vidrio-hondo {
+    background: color-mix(in srgb, var(--color-crema-2) 72%, transparent);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid color-mix(in srgb, var(--color-arena) 70%, transparent);
+  }
+
+  .versalita {
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.6875rem;
+    font-weight: 400;
+  }
+
+  .sin-arrastre {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+/* Respeta a quien pidio menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
