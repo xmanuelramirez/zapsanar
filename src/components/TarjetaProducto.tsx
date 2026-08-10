@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import FotoProducto from './FotoProducto'
+import Insignias from './Insignias'
 import type { Producto } from '../data/productos'
 import { ETIQUETAS } from '../data/familias'
 
@@ -44,11 +45,13 @@ export default function TarjetaProducto({ producto, activa, ancho, onClick }: Pr
         <p className="mt-1 text-xs text-tinta-suave">{producto.esencia}</p>
       </div>
 
+      <Insignias necesidades={producto.necesidades} compactas className="mt-2.5 justify-center" />
+
       {/* Solo aparece en la tarjeta activa: invita a abrir la ficha */}
       <motion.span
         animate={{ opacity: activa ? 1 : 0 }}
         transition={{ duration: 0.4 }}
-        className="versalita mt-3 rounded-full border border-savia-claro/60 px-4 py-1.5 text-savia"
+        className="versalita mt-2.5 rounded-full border border-savia-claro/60 px-4 py-1.5 text-savia"
       >
         Ver ficha
       </motion.span>

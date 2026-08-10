@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import FotoProducto from './FotoProducto'
+import Insignias from './Insignias'
 import type { Producto } from '../data/productos'
 import { ETIQUETAS } from '../data/familias'
 import { enlaceWhatsapp, sitio } from '../data/sitio'
@@ -58,6 +59,8 @@ export default function FichaProducto({
               {producto.esencia}
             </p>
           </div>
+
+          <Insignias necesidades={producto.necesidades} />
 
           <ul className="flex flex-col gap-2">
             {producto.beneficios.map((b) => (

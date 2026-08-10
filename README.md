@@ -54,7 +54,7 @@ En `src/data/productos.ts`. Cada producto necesita:
 | `nombre`       | Nombre comercial                                           |
 | `esencia`      | Dos o tres palabras que lo definen                         |
 | `familia`      | `tintura`, `aceite` o `cuidado`. Es la etiqueta de la tarjeta |
-| `necesidades`  | Para qué se busca. Alimenta los filtros. Ver abajo         |
+| `necesidades`  | Para qué se busca. Alimenta filtros e insignias. Ver abajo  |
 | `beneficios`   | Exactamente tres, uno por línea                            |
 | `aplicacion`   | Una sola frase                                             |
 | `oral`         | `true` si se toma: activa la advertencia de embarazo       |
@@ -62,18 +62,26 @@ En `src/data/productos.ts`. Cada producto necesita:
 | `presentacion` | Opcional. Si falta, no se dibuja ese recuadro              |
 | `tono`         | `[color claro, color profundo]` del halo y la sombra       |
 
-### Los filtros por necesidad
+### Necesidades: filtros e insignias
 
 Están en `src/data/necesidades.ts`: `mente`, `digestion`, `dolor`, `piel`,
-`cabello` y `defensas`. Un producto puede pertenecer a varias.
+`cabello` y `defensas`. Cumplen dos funciones a la vez: alimentan los filtros
+del catálogo y se dibujan como insignias en cada tarjeta y ficha.
 
-La regla al asignarlas: **una necesidad solo se marca si se lee en alguno de
-los tres beneficios del producto**. Si alguien filtra por Dolor y abre una
-ficha donde ningún beneficio habla de dolor, el filtro parece roto.
+**El orden importa.** La primera es la principal y sale llena de verde y más
+grande; las otras quedan en segundo plano. Máximo tres, y algunas plantas
+tienen solo una: el orégano es un especialista y eso también informa.
+
+Se asignan leyendo la lista completa de propiedades de la planta en el catálogo
+en PDF, no solo los tres beneficios que muestra la ficha. Una planta hace
+bastante más de lo que caben en tres líneas, y las insignias son justamente lo
+que deja ver ese alcance. La principal debería coincidir con el subtítulo que
+le da el catálogo: si la menta es "Analgésica y antiinflamatoria", su insignia
+principal es Dolor aunque su primer beneficio hable de digestión.
 
 Si se agrega una necesidad nueva, hay que darle también su texto en
-`NECESIDADES` (el nombre del botón) y en `DESCRIPCIONES` (la línea que aparece
-bajo el título al seleccionarla).
+`NECESIDADES` (el nombre del botón y de la insignia) y en `DESCRIPCIONES` (la
+línea que aparece bajo el título al filtrar).
 
 ### Fotos
 

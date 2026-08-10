@@ -34,7 +34,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Romero',
     esencia: 'Oxigenador cerebral',
     familia: 'tintura',
-    necesidades: ['mente'],
+    necesidades: ['mente', 'defensas', 'cabello'],
     beneficios: [
       'Potencia la memoria y la concentración',
       'Mejora la circulación sanguínea',
@@ -102,7 +102,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Ruda',
     esencia: 'Antiespasmódica',
     familia: 'tintura',
-    necesidades: ['digestion', 'dolor'],
+    necesidades: ['digestion', 'dolor', 'mente'],
     beneficios: [
       'Reduce espasmos y cólicos abdominales',
       'Regula el ciclo menstrual',
@@ -119,7 +119,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Menta',
     esencia: 'Analgésica y antiinflamatoria',
     familia: 'tintura',
-    necesidades: ['digestion', 'dolor', 'defensas'],
+    necesidades: ['dolor', 'digestion', 'defensas'],
     beneficios: [
       'Calma náuseas, gases y espasmos',
       'Descongestiona las vías respiratorias',
@@ -136,7 +136,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Ortiga',
     esencia: 'Antiinflamatoria y nutricional',
     familia: 'tintura',
-    necesidades: ['defensas', 'cabello'],
+    necesidades: ['defensas', 'cabello', 'dolor'],
     beneficios: [
       'Purifica la sangre y aporta minerales',
       'Diurética, protege hígado y riñón',
@@ -170,7 +170,7 @@ export const productos: Producto[] = [
     nombre: 'Tintura de Semilla de Papaya',
     esencia: 'Desparasitante',
     familia: 'tintura',
-    necesidades: ['digestion'],
+    necesidades: ['digestion', 'defensas'],
     beneficios: [
       'Elimina lombrices intestinales',
       'La papaína ayuda a digerir proteínas',
@@ -187,7 +187,7 @@ export const productos: Producto[] = [
     nombre: 'Aceite Zanadol',
     esencia: 'Antiespasmódico',
     familia: 'aceite',
-    necesidades: ['dolor'],
+    necesidades: ['dolor', 'mente'],
     beneficios: [
       'Alivia dolor de espalda, cuello y músculos',
       'Estimula la circulación',
@@ -235,7 +235,7 @@ export const productos: Producto[] = [
     nombre: 'Crema de Caléndula',
     esencia: 'Cicatrizante',
     familia: 'cuidado',
-    necesidades: ['piel'],
+    necesidades: ['piel', 'dolor'],
     beneficios: [
       'Cierra heridas, raspones y úlceras',
       'Calma quemaduras, golpes y picaduras',
@@ -267,7 +267,7 @@ export const productos: Producto[] = [
     nombre: 'Tónico Natural',
     esencia: 'Fuerza desde la raíz',
     familia: 'cuidado',
-    necesidades: ['cabello'],
+    necesidades: ['cabello', 'piel'],
     beneficios: [
       'Estimula el crecimiento del cabello',
       'Controla la grasa del cuero cabelludo',
