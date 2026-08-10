@@ -98,19 +98,42 @@ el catálogo original usa la misma foto para los dos.
 
 ## Publicar
 
-El sitio se despliega solo a GitHub Pages con cada `push` a `main`, mediante
-`.github/workflows/deploy.yml`.
+El sitio vive en Cloudflare Workers como assets estáticos: no hay código de
+servidor, solo archivos. `wrangler.jsonc` es toda la configuración.
 
-Configuración inicial, una sola vez:
+Cloudflare compila desde el repositorio de GitHub con cada `push` a `main`.
+Configuración inicial, una sola vez, en el panel de Cloudflare:
 
-1. Sube el repositorio a GitHub.
-2. En el repositorio: Settings → Pages → Build and deployment → Source:
-   **GitHub Actions**.
-3. El primer push a `main` publica el sitio en
-   `https://<usuario>.github.io/<repositorio>/`.
+1. Workers & Pages → Create application → Workers → Connect to Git.
+2. Repositorio `zapsanar`, rama `main`.
+3. Build command: `npm run build`.
+4. Deploy command: `npx wrangler deploy` (es el valor por omisión).
 
-Con dominio propio, cambia `VITE_BASE` a `/` en el workflow y agrega el dominio
-en Settings → Pages.
+`.node-version` fija Node 24 para esos builds.
+
+Para desplegar a mano desde la computadora:
+
+```bash
+npm run build
+npx wrangler deploy
+```
+
+### Por qué no consume cuota
+
+Las peticiones a assets estáticos son gratuitas e ilimitadas y no ejecutan
+Worker, así que no cuentan contra el límite diario de 100.000 peticiones del
+plan gratuito. Lo único que se consume son minutos de build, 3.000 al mes, y
+cada despliegue gasta alrededor de uno.
+
+### Dominio propio
+
+`base` en `vite.config.ts` es `/` y así se queda: Cloudflare sirve desde la
+raíz del dominio. Para conectar un dominio, se agrega como Custom Domain en la
+configuración del Worker, sin tocar el código.
+
+El sitio estuvo antes en GitHub Pages. Ese flujo vivía en
+`.github/workflows/deploy.yml` y sigue en el historial de git si hiciera falta
+recuperarlo.
 
 ## Decisiones de diseño
 
