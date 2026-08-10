@@ -89,7 +89,7 @@ export default function Inicio({ irAProductos }: { irAProductos: () => void }) {
             <button
               key={p.id}
               onClick={() => setI(idx)}
-              aria-label={p.nombre}
+              aria-label={`Mostrar ${p.nombre}`}
               className="h-1.5 rounded-full transition-all duration-500"
               style={{
                 width: idx === i ? 26 : 6,
