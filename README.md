@@ -98,42 +98,44 @@ el catálogo original usa la misma foto para los dos.
 
 ## Publicar
 
-El sitio vive en Cloudflare Workers como assets estáticos: no hay código de
-servidor, solo archivos. `wrangler.jsonc` es toda la configuración.
+El sitio vive en GitHub Pages, servido desde el propio repositorio. Es gratis
+mientras el repositorio sea público, que es el caso, y no hace falta cuenta en
+ningún otro servicio.
 
-Cloudflare compila desde el repositorio de GitHub con cada `push` a `main`.
-Configuración inicial, una sola vez, en el panel de Cloudflare:
+`.github/workflows/deploy.yml` compila y publica con cada `push` a `main`. La
+configuración del repositorio ya está hecha: Settings → Pages, con Source en
+"GitHub Actions". `.node-version` fija Node 24 para esos builds.
 
-1. Workers & Pages → Create application → Workers → Connect to Git.
-2. Repositorio `zapsanar`, rama `main`.
-3. Build command: `npm run build`.
-4. Deploy command: `npx wrangler deploy` (es el valor por omisión).
+URL: https://xmanuelramirez.github.io/zapsanar/
 
-`.node-version` fija Node 24 para esos builds.
+### Por qué `base` no es "/"
 
-Para desplegar a mano desde la computadora:
+Un sitio de proyecto de GitHub Pages vive dentro de una subcarpeta con el
+nombre del repositorio. Vite necesita ese prefijo o los assets se piden a la
+raíz del dominio y salen 404. El workflow lo pasa como `VITE_BASE=/<repo>/` y
+`vite.config.ts` lo lee; en local queda en `/` para que `npm run dev` funcione
+sin configurar nada.
+
+Las tres imágenes que se cargan desde JavaScript (`Fondo`, `FotoProducto` y la
+tira de `Contacto`) anteponen `import.meta.env.BASE_URL`. Una imagen nueva
+tiene que hacer lo mismo o se romperá solo en producción.
+
+Para reproducir en local lo que se publica:
 
 ```bash
-npm run build
-npx wrangler deploy
+VITE_BASE=/zapsanar/ npm run build
+npm run preview
 ```
-
-### Por qué no consume cuota
-
-Las peticiones a assets estáticos son gratuitas e ilimitadas y no ejecutan
-Worker, así que no cuentan contra el límite diario de 100.000 peticiones del
-plan gratuito. Lo único que se consume son minutos de build, 3.000 al mes, y
-cada despliegue gasta alrededor de uno.
 
 ### Dominio propio
 
-`base` en `vite.config.ts` es `/` y así se queda: Cloudflare sirve desde la
-raíz del dominio. Para conectar un dominio, se agrega como Custom Domain en la
-configuración del Worker, sin tocar el código.
+Con un dominio propio el sitio pasa a servirse desde la raíz, así que hay que
+quitar el prefijo: poner el dominio en Settings → Pages → Custom domain, crear
+`public/CNAME` con ese dominio y cambiar el workflow para que `VITE_BASE` sea
+`/`.
 
-El sitio estuvo antes en GitHub Pages. Ese flujo vivía en
-`.github/workflows/deploy.yml` y sigue en el historial de git si hiciera falta
-recuperarlo.
+El sitio estuvo un tiempo en Cloudflare Workers. Esa configuración vivía en
+`wrangler.jsonc` y sigue en el historial de git.
 
 ## Decisiones de diseño
 
