@@ -1,8 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Base blanca y cremas translucidas */
-  --color-lienzo: #ffffff;
+  /* Base calida translucida. El lienzo no es blanco puro: un blanco exacto
+     aplana todo lo que se pose encima. */
+  --color-lienzo: #fdfcfa;
   --color-crema: #fbf7f1;
   --color-crema-2: #f6efe4;
   --color-arena: #ece0cf;
@@ -67,19 +68,66 @@
 }
 
 @layer utilities {
-  /* Cristal crema: nunca un bloque solido, siempre luz atravesando. */
+  /* El lienzo no es un color, son dos luces: una calida arriba y arena abajo a
+     la derecha. Un plano de un solo tono es lo que hacia que todo lo demas
+     pareciera flotar en vacio. */
+  .lienzo {
+    background:
+      radial-gradient(
+        118% 92% at 50% -14%,
+        color-mix(in srgb, var(--color-crema-2) 95%, transparent) 0%,
+        transparent 62%
+      ),
+      radial-gradient(
+        88% 68% at 104% 110%,
+        color-mix(in srgb, var(--color-arena) 62%, transparent) 0%,
+        transparent 58%
+      ),
+      var(--color-lienzo);
+  }
+
+  /* Cristal crema: nunca un bloque solido, siempre luz atravesando. El brillo
+     interior superior es lo que lo separa del fondo cuando ambos son claros. */
   .vidrio {
-    background: color-mix(in srgb, var(--color-crema) 62%, transparent);
+    background: color-mix(in srgb, var(--color-crema) 66%, transparent);
     backdrop-filter: blur(14px) saturate(115%);
     -webkit-backdrop-filter: blur(14px) saturate(115%);
     border: 1px solid color-mix(in srgb, var(--color-arena) 55%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, #ffffff 70%, transparent),
+      0 18px 40px -28px color-mix(in srgb, var(--color-tinta) 45%, transparent);
   }
 
   .vidrio-hondo {
-    background: color-mix(in srgb, var(--color-crema-2) 72%, transparent);
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    background: color-mix(in srgb, var(--color-crema-2) 70%, transparent);
+    backdrop-filter: blur(22px) saturate(120%);
+    -webkit-backdrop-filter: blur(22px) saturate(120%);
     border: 1px solid color-mix(in srgb, var(--color-arena) 70%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, #ffffff 65%, transparent),
+      0 40px 90px -50px color-mix(in srgb, var(--color-tinta) 60%, transparent);
+  }
+
+  /* Grano fino sobre todo el lienzo. Es lo unico que evita que los degradados
+     grandes se vean como plastico liso. */
+  .grano {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    mix-blend-mode: multiply;
+  }
+
+  /* Fila de plantas del cierre: circulos con el halo de su propio color. Es
+     decoracion, no navegacion, asi que no lleva ningun gesto de boton. */
+  .mota {
+    height: clamp(2.75rem, 7vw, 5rem);
+    width: clamp(2.75rem, 7vw, 5rem);
+  }
+
+  /* Profundidad del carrusel: sin perspectiva, el giro de las tarjetas
+     laterales se veria como un simple achatamiento. */
+  .escena {
+    perspective: 1400px;
+    perspective-origin: 50% 45%;
   }
 
   .versalita {
@@ -89,13 +137,63 @@
     font-weight: 400;
   }
 
+  /* Versalita que se aprieta en pantallas chicas y recupera su aire en
+     escritorio. La barra de modulos del movil no cabe con el tracking normal. */
+  .versalita-fina {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.625rem;
+    font-weight: 400;
+  }
+
+  @media (min-width: 768px) {
+    .versalita-fina {
+      letter-spacing: 0.22em;
+      font-size: 0.6875rem;
+    }
+  }
+
+  /* En movil la ficha se desplaza por dentro. El boton de pedido no puede
+     irse con el texto: es la unica accion real de toda la app. */
+  .pie-pegado {
+    position: sticky;
+    bottom: 0;
+    margin-inline: -1.25rem;
+    padding: 0.85rem 1.25rem 0.25rem;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-crema-2) 97%, transparent) 62%,
+      transparent
+    );
+  }
+
+  @media (min-width: 768px) {
+    .pie-pegado {
+      position: static;
+      margin-inline: 0;
+      padding: 0;
+      background: none;
+    }
+  }
+
   .sin-arrastre {
     -webkit-user-drag: none;
     user-select: none;
   }
+
+  /* Barra de filtros del movil: se desliza en horizontal sin dejar rastro. */
+  .sin-barra {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sin-barra::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-/* Respeta a quien pidio menos movimiento. */
+/* Respeta a quien pidio menos movimiento. Las animaciones de framer-motion no
+   pasan por CSS, asi que ademas se consultan con useReducedMotion. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

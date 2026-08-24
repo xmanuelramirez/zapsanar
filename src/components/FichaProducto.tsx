@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import FotoProducto from './FotoProducto'
 import Insignias from './Insignias'
 import type { Producto } from '../data/productos'
@@ -14,92 +15,145 @@ interface Props {
 
 const suave = { duration: 0.55, ease: [0.22, 1, 0.36, 1] } as const
 
+// El texto entra en cascada detras de la planta. Asi se lee en orden en vez de
+// caer todo junto, que es lo que hacia que la ficha se sintiera un volante.
+const columna: Variants = {
+  oculto: {},
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.14 } },
+}
+
+const linea: Variants = {
+  oculto: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: suave },
+}
+
 export default function FichaProducto({
   producto,
   onCerrar,
   onAnterior,
   onSiguiente,
 }: Props) {
+  const [claro, hondo] = producto.tono
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.35 }}
-      className="absolute inset-0 z-30 flex items-center justify-center px-[4vw]"
-      style={{ background: 'color-mix(in srgb, #ffffff 72%, transparent)', backdropFilter: 'blur(6px)' }}
+      className="absolute inset-0 z-30 flex items-center justify-center px-[3vw] md:px-[4vw]"
+      style={{
+        background: 'color-mix(in srgb, #ffffff 70%, transparent)',
+        backdropFilter: 'blur(8px)',
+      }}
+      onClick={onCerrar}
     >
       <motion.article
-        initial={{ opacity: 0, y: 18, scale: 0.985 }}
+        initial={{ opacity: 0, y: 26, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 10, scale: 0.99 }}
+        exit={{ opacity: 0, y: 14, scale: 0.98 }}
         transition={suave}
         onPanEnd={(_, info) => {
           if (info.offset.x < -70) onSiguiente()
           if (info.offset.x > 70) onAnterior()
         }}
-        className="vidrio-hondo relative grid h-[82dvh] w-full max-w-6xl grid-rows-[minmax(0,0.62fr)_minmax(0,1.38fr)] overflow-hidden rounded-[32px] md:h-[74dvh] md:grid-cols-[0.95fr_1.05fr] md:grid-rows-1"
+        // El clic dentro no debe cerrar: solo el velo de atras cierra.
+        onClick={(e) => e.stopPropagation()}
+        className="vidrio-hondo relative grid h-[92dvh] w-full max-w-6xl grid-rows-[minmax(0,0.76fr)_minmax(0,1.24fr)] overflow-hidden rounded-[28px] md:h-[76dvh] md:grid-cols-[0.95fr_1.05fr] md:grid-rows-1 md:rounded-[32px]"
       >
-        <FotoProducto
-          foto={producto.foto}
-          tono={producto.tono}
-          alt={producto.nombre}
-          flotando
-          className="min-h-0 p-4 md:p-6"
+        {/* Resplandor del color de la planta detras de la foto */}
+        <div
+          className="pointer-events-none absolute -left-[10%] -top-[20%] aspect-square w-[70%] rounded-full md:w-[45%]"
+          style={{ background: `radial-gradient(circle, ${claro} 0%, ${claro}00 70%)` }}
         />
 
-        {/* Cara de texto: corta, jerarquizada */}
-        <div className="flex min-h-0 flex-col justify-center gap-2.5 p-4 md:gap-4 md:p-9">
-          <div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.88, rotate: -3 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          className="relative min-h-0"
+        >
+          <FotoProducto
+            foto={producto.foto}
+            tono={producto.tono}
+            alt={producto.nombre}
+            flotando
+            className="h-full w-full p-3 md:p-6"
+          />
+        </motion.div>
+
+        {/* Cara de texto. En movil se deja desplazar por dentro: la ficha
+            completa no cabe en un telefono sin encoger la letra al limite. El
+            lienzo de la pagina sigue sin scroll. */}
+        <motion.div
+          variants={columna}
+          initial="oculto"
+          animate="visible"
+          className="relative flex min-h-0 flex-col justify-start gap-2.5 overflow-y-auto p-5 md:justify-center md:gap-4 md:overflow-visible md:p-9"
+        >
+          <motion.div variants={linea}>
             <span className="versalita text-savia">{ETIQUETAS[producto.familia]}</span>
-            <h2 className="mt-2 text-[clamp(1.6rem,3vw,2.7rem)] leading-tight text-tinta">
+            <h2 className="mt-1.5 text-[clamp(1.7rem,3vw,2.7rem)] leading-tight text-tinta">
               {producto.nombre}
             </h2>
-            <p className="mt-1 text-[clamp(0.9rem,1.3vw,1.1rem)] text-tinta-suave">
+            <p className="mt-1 text-[clamp(0.92rem,1.3vw,1.1rem)] text-tinta-suave">
               {producto.esencia}
             </p>
-          </div>
+          </motion.div>
 
-          <Insignias necesidades={producto.necesidades} />
+          <motion.div variants={linea}>
+            <Insignias necesidades={producto.necesidades} />
+          </motion.div>
 
-          <ul className="flex flex-col gap-2">
+          <motion.ul variants={columna} className="flex flex-col gap-2">
             {producto.beneficios.map((b) => (
-              <li key={b} className="flex items-center gap-3 text-sm text-tinta">
+              <motion.li
+                key={b}
+                variants={linea}
+                className="flex items-center gap-3 text-sm text-tinta"
+              >
                 <span
                   className="h-1.5 w-1.5 shrink-0 rounded-full"
-                  style={{ background: producto.tono[1] }}
+                  style={{ background: hondo }}
                 />
                 {b}
-              </li>
+              </motion.li>
             ))}
-          </ul>
+          </motion.ul>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <motion.div variants={linea} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Dato titulo="Cómo se usa" cuerpo={producto.aplicacion} />
             {producto.presentacion && (
               <Dato titulo="Presentación" cuerpo={producto.presentacion} />
             )}
-          </div>
+          </motion.div>
 
           {producto.oral && (
-            <p className="text-[0.7rem] leading-snug text-tierra">{sitio.advertencia}</p>
+            <motion.p
+              variants={linea}
+              className="text-[0.72rem] leading-snug text-tierra"
+            >
+              {sitio.advertencia}
+            </motion.p>
           )}
 
-          <a
-            href={enlaceWhatsapp(producto.nombre)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-1 inline-flex w-fit items-center gap-2 rounded-full bg-savia px-7 py-3 text-sm tracking-wide text-white transition-colors duration-300 hover:bg-savia-hondo"
-          >
-            Pedir por WhatsApp
-          </a>
-        </div>
+          <motion.div variants={linea} className="pie-pegado mt-auto md:mt-1">
+            <a
+              href={enlaceWhatsapp(producto.nombre)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-savia px-7 py-3.5 text-sm tracking-wide text-white transition-colors duration-300 hover:bg-savia-hondo md:w-fit"
+            >
+              Pedir por WhatsApp
+            </a>
+          </motion.div>
+        </motion.div>
 
         {/* Controles */}
         <button
           onClick={onCerrar}
           aria-label="Cerrar ficha"
-          className="vidrio absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full text-tinta-suave transition-colors duration-300 hover:text-savia"
+          className="vidrio absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full text-tinta-suave transition-colors duration-300 hover:text-savia md:right-4 md:top-4"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d="M5 5 L19 19 M19 5 L5 19" strokeLinecap="round" />

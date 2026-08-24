@@ -11,7 +11,24 @@ import { productos } from './data/productos'
 import type { Filtro } from './data/necesidades'
 
 const MODULOS = ['Inicio', 'Productos', 'Uso', 'Contacto'] as const
-const PRODUCTOS = 1
+type Modulo = (typeof MODULOS)[number]
+
+// Los indices se derivan del nombre. Antes eran numeros sueltos repartidos por
+// el archivo y reordenar un modulo los rompia en silencio.
+const indiceDe = (m: Modulo) => MODULOS.indexOf(m)
+const PRODUCTOS = indiceDe('Productos')
+
+/**
+ * Color de fondo de cada modulo. En el catalogo manda el tono de la planta que
+ * se esta viendo; los demas modulos traen el suyo para que ninguno se sienta la
+ * misma pantalla con otro texto.
+ */
+const AMBIENTES: Record<Modulo, { tono: [string, string]; foto: string }> = {
+  Inicio: { tono: ['#F3EDE1', '#8A7A5E'], foto: 'productos/frasco.png' },
+  Productos: { tono: ['#DCE8DA', '#4C7A5A'], foto: 'productos/romero.png' },
+  Uso: { tono: ['#E4EEE6', '#4C7A5A'], foto: 'productos/menta.png' },
+  Contacto: { tono: ['#FBE6D2', '#C98A63'], foto: 'productos/calendula.png' },
+}
 
 export default function App() {
   const [modulo, setModulo] = useState(0)
@@ -90,13 +107,23 @@ export default function App() {
   }, [indice, visibles.length])
 
   const productoActual = visibles[indice]
+  const nombreModulo = MODULOS[modulo]
+  const ambiente =
+    modulo === PRODUCTOS && productoActual
+      ? { tono: productoActual.tono, foto: productoActual.foto }
+      : AMBIENTES[nombreModulo]
+
+  const irAModulo = (i: number) => {
+    setFicha(false)
+    irA(i)
+  }
 
   return (
-    <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-lienzo">
-      <Fondo />
+    <div className="lienzo relative flex h-[100dvh] w-full flex-col overflow-hidden">
+      <Fondo tono={ambiente.tono} foto={ambiente.foto} />
 
-      <header className="relative z-20 flex h-[4.5rem] shrink-0 items-center justify-between px-[5vw]">
-        <button onClick={() => irA(0)} aria-label="Ir al inicio">
+      <header className="relative z-20 flex h-14 shrink-0 items-center justify-between px-[5vw] md:h-[4.5rem]">
+        <button onClick={() => irAModulo(0)} aria-label="Ir al inicio">
           <Marca />
         </button>
 
@@ -104,10 +131,7 @@ export default function App() {
           {MODULOS.map((m, i) => (
             <button
               key={m}
-              onClick={() => {
-                setFicha(false)
-                irA(i)
-              }}
+              onClick={() => irAModulo(i)}
               className="relative px-4 py-2 text-sm tracking-wide transition-colors duration-300"
               style={{ color: modulo === i ? 'var(--color-savia)' : 'var(--color-tinta-suave)' }}
             >
@@ -135,50 +159,69 @@ export default function App() {
             if (info.offset.x > 70) irA(modulo - 1)
           }}
         >
-        <motion.div
-          className="flex h-full w-full"
-          animate={{ x: `-${modulo * 100}%` }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Seccion nombre="Inicio">
-            <Inicio irAProductos={() => irA(PRODUCTOS)} />
-          </Seccion>
+          <motion.div
+            className="flex h-full w-full"
+            animate={{ x: `-${modulo * 100}%` }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Seccion nombre="Inicio">
+              <Inicio activo={nombreModulo === 'Inicio'} irAProductos={() => irA(PRODUCTOS)} />
+            </Seccion>
 
-          <Seccion nombre="Productos">
-            <Productos
-              visibles={visibles}
-              indice={indice}
-              setIndice={setIndice}
-              filtro={filtro}
-              setFiltro={cambiarFiltro}
-              abrirFicha={() => setFicha(true)}
-            />
-          </Seccion>
+            <Seccion nombre="Productos">
+              <Productos
+                visibles={visibles}
+                indice={indice}
+                setIndice={setIndice}
+                filtro={filtro}
+                setFiltro={cambiarFiltro}
+                abrirFicha={() => setFicha(true)}
+              />
+            </Seccion>
 
-          <Seccion nombre="Uso">
-            <Uso activo={modulo === 2} />
-          </Seccion>
+            <Seccion nombre="Uso">
+              <Uso activo={nombreModulo === 'Uso'} />
+            </Seccion>
 
-          <Seccion nombre="Contacto">
-            <Contacto activo={modulo === 3} />
-          </Seccion>
-        </motion.div>
+            <Seccion nombre="Contacto">
+              <Contacto activo={nombreModulo === 'Contacto'} />
+            </Seccion>
+          </motion.div>
         </motion.div>
       </main>
 
-      <footer className="relative z-20 flex h-[4rem] shrink-0 items-center justify-between px-[5vw]">
+      <footer className="relative z-20 flex h-14 shrink-0 items-center justify-between gap-2 px-[5vw] md:h-16">
         <span className="versalita hidden text-tinta-suave md:block">
           {modulo === PRODUCTOS ? 'Desliza o usa las flechas' : 'Usa las flechas para avanzar'}
         </span>
 
-        <div className="flex items-center gap-2">
+        {/* En movil los modulos van con nombre, no con puntos: un punto no dice
+            a donde lleva y aqui no hay barra superior donde comprobarlo. */}
+        <nav className="flex flex-1 items-center justify-center gap-0.5 md:hidden">
           {MODULOS.map((m, i) => (
             <button
               key={m}
-              onClick={() => {
-                setFicha(false)
-                irA(i)
-              }}
+              onClick={() => irAModulo(i)}
+              className="versalita-fina relative flex h-11 items-center rounded-full px-2.5 transition-colors duration-300"
+              style={{ color: modulo === i ? '#fff' : 'var(--color-tinta-suave)' }}
+            >
+              {modulo === i && (
+                <motion.span
+                  layoutId="pastilla-modulo"
+                  className="absolute inset-0 rounded-full bg-savia"
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                />
+              )}
+              <span className="relative">{m}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-2 md:flex">
+          {MODULOS.map((m, i) => (
+            <button
+              key={m}
+              onClick={() => irAModulo(i)}
               aria-label={m}
               className="h-1.5 rounded-full transition-all duration-500"
               style={{
@@ -192,7 +235,7 @@ export default function App() {
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-2 md:flex">
           <BotonModulo
             direccion="izq"
             deshabilitado={modulo === 0}

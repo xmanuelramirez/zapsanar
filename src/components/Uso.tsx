@@ -39,42 +39,53 @@ const pasos: Paso[] = [
 
 export default function Uso({ activo }: { activo: boolean }) {
   return (
-    <div className="flex h-full w-full flex-col justify-center gap-6 px-[6vw]">
-      <div className="max-w-xl">
+    // Las tarjetas se estiran hasta llenar el alto disponible: centradas en un
+    // hueco grande, la pantalla se leia medio vacia.
+    <div className="flex h-full w-full flex-col gap-3 px-[6vw] py-3 md:gap-6 md:py-6">
+      <div className="max-w-xl shrink-0">
         <span className="versalita text-savia">Cómo se toma</span>
-        <h2 className="mt-1 text-[clamp(1.6rem,3.4vw,2.8rem)] leading-tight text-tinta">
+        <h2 className="mt-1 text-[clamp(1.7rem,3.6vw,3rem)] leading-tight text-tinta">
           Unas gotas,
           <br />
           con constancia
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
+      <div className="grid min-h-0 flex-1 grid-cols-2 grid-rows-2 gap-2.5 md:grid-cols-4 md:grid-rows-1 md:gap-5">
         {pasos.map((p, i) => (
           <motion.div
             key={p.n}
             initial={false}
-            animate={{ opacity: activo ? 1 : 0, y: activo ? 0 : 16 }}
+            animate={{
+              opacity: activo ? 1 : 0,
+              y: activo ? 0 : 22,
+              scale: activo ? 1 : 0.96,
+            }}
             transition={{
-              duration: 0.6,
+              duration: 0.65,
               delay: activo ? i * 0.09 : 0,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="vidrio flex flex-col gap-3 rounded-[24px] p-4 md:p-6"
+            className="vidrio flex h-full min-h-0 flex-col justify-between gap-2 rounded-[24px] p-4 transition-transform duration-300 hover:-translate-y-1 md:gap-3 md:p-6"
           >
             <div className="flex items-center justify-between">
               <span className="font-display text-2xl text-savia-claro">{p.n}</span>
-              <Icono tipo={p.icono} />
+              {/* El icono en su propio disco: suelto sobre el vidrio se perdia */}
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-savia/10">
+                <Icono tipo={p.icono} />
+              </span>
             </div>
-            <h3 className="text-[clamp(1rem,1.6vw,1.35rem)] leading-tight text-tinta">
-              {p.titulo}
-            </h3>
-            <p className="text-[0.8rem] leading-snug text-tinta-suave">{p.texto}</p>
+            <div>
+              <h3 className="text-[clamp(1.05rem,1.7vw,1.45rem)] leading-tight text-tinta">
+                {p.titulo}
+              </h3>
+              <p className="mt-1.5 text-[0.8rem] leading-snug text-tinta-suave">{p.texto}</p>
+            </div>
           </motion.div>
         ))}
       </div>
 
-      <p className="max-w-2xl text-[0.78rem] leading-snug text-tierra">
+      <p className="max-w-2xl shrink-0 text-[0.78rem] leading-snug text-tierra">
         {sitio.advertencia}
       </p>
     </div>
