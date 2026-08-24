@@ -98,44 +98,47 @@ el catálogo original usa la misma foto para los dos.
 
 ## Publicar
 
-El sitio vive en GitHub Pages, servido desde el propio repositorio. Es gratis
-mientras el repositorio sea público, que es el caso, y no hace falta cuenta en
-ningún otro servicio.
+El sitio vive en Cloudflare Pages, gratis, en https://zapsanar.pages.dev
 
-`.github/workflows/deploy.yml` compila y publica con cada `push` a `main`. La
-configuración del repositorio ya está hecha: Settings → Pages, con Source en
-"GitHub Actions". `.node-version` fija Node 24 para esos builds.
+Cloudflare compila desde el repositorio de GitHub con cada `push` a `main`.
+Configuración inicial, una sola vez, en el panel de Cloudflare:
 
-URL: https://xmanuelramirez.github.io/zapsanar/
+1. Workers & Pages → Create → Pages → Connect to Git.
+2. Repositorio `zapsanar`, rama `main`.
+3. Nombre del proyecto: `zapsanar`. De ahí sale el dominio.
+4. Build command: `npm run build`.
+5. Build output directory: `dist`.
 
-### Por qué `base` no es "/"
+`.node-version` fija Node 24 para esos builds.
 
-Un sitio de proyecto de GitHub Pages vive dentro de una subcarpeta con el
-nombre del repositorio. Vite necesita ese prefijo o los assets se piden a la
-raíz del dominio y salen 404. El workflow lo pasa como `VITE_BASE=/<repo>/` y
-`vite.config.ts` lo lee; en local queda en `/` para que `npm run dev` funcione
-sin configurar nada.
+No hace falta archivo de configuración en el repositorio. `wrangler.jsonc` solo
+es necesario para Workers o para Pages Functions, y este sitio no tiene código
+de servidor: son archivos y nada más. Un `wrangler.jsonc` sin
+`pages_build_output_dir` además solo valdría para desarrollo local.
+
+### Pages y Workers no son lo mismo
+
+Importa para el dominio. Un Worker queda en
+`<worker>.<subdominio-de-la-cuenta>.workers.dev`, así que arrastra el nombre de
+la cuenta. Un proyecto de Pages queda en `<proyecto>.pages.dev`, sin nada de la
+cuenta en medio. El sitio estuvo un tiempo como Worker y por eso su dirección
+tenía delante un nombre que no era el de la marca.
+
+### Por qué `base` es "/"
+
+Pages sirve desde la raíz del dominio, así que no hace falta prefijo. En un
+sitio de proyecto de GitHub Pages sí lo haría, porque ahí el sitio vive en
+`/<repo>/`; ese flujo vivió en `.github/workflows/deploy.yml` y sigue en el
+historial de git.
 
 Las tres imágenes que se cargan desde JavaScript (`Fondo`, `FotoProducto` y la
-tira de `Contacto`) anteponen `import.meta.env.BASE_URL`. Una imagen nueva
-tiene que hacer lo mismo o se romperá solo en producción.
-
-Para reproducir en local lo que se publica:
-
-```bash
-VITE_BASE=/zapsanar/ npm run build
-npm run preview
-```
+tira de `Contacto`) anteponen `import.meta.env.BASE_URL`. Conviene que una
+imagen nueva haga lo mismo: hoy no cambia nada, pero es lo que permite mover el
+sitio a una subcarpeta sin tocar componentes.
 
 ### Dominio propio
 
-Con un dominio propio el sitio pasa a servirse desde la raíz, así que hay que
-quitar el prefijo: poner el dominio en Settings → Pages → Custom domain, crear
-`public/CNAME` con ese dominio y cambiar el workflow para que `VITE_BASE` sea
-`/`.
-
-El sitio estuvo un tiempo en Cloudflare Workers. Esa configuración vivía en
-`wrangler.jsonc` y sigue en el historial de git.
+Se agrega en el panel del proyecto, en Custom domains, sin tocar el código.
 
 ## Decisiones de diseño
 
