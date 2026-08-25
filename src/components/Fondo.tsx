@@ -6,6 +6,8 @@ interface Props {
   tono: [string, string]
   /** Foto del contexto activo. Se usa desenfocada como masa de color del fondo */
   foto: string
+  /** La portada trae su propia fotografia del taller y lo taparia entero */
+  mostrarTaller: boolean
 }
 
 // Motas de polen. Posicion y ritmo fijos: si fueran aleatorias cambiarian en
@@ -26,7 +28,7 @@ const MASCARA = 'radial-gradient(circle, #000 0%, transparent 70%)'
  * desenfocada: una masa organica de su color, no una mancha inventada. Encima
  * van las auroras del tono y el grano. Todo queda muy por debajo del contenido.
  */
-export default function Fondo({ tono, foto }: Props) {
+export default function Fondo({ tono, foto, mostrarTaller }: Props) {
   const [claro, hondo] = tono
   const quieto = useReducedMotion() ?? false
 
@@ -114,7 +116,7 @@ export default function Fondo({ tono, foto }: Props) {
           />
         ))}
 
-      <Taller />
+      <Taller visible={mostrarTaller} />
 
       <div className="grano absolute inset-0" />
     </div>

@@ -120,7 +120,11 @@ export default function App() {
 
   return (
     <div className="lienzo relative flex h-[100dvh] w-full flex-col overflow-hidden">
-      <Fondo tono={ambiente.tono} foto={ambiente.foto} />
+      <Fondo
+        tono={ambiente.tono}
+        foto={ambiente.foto}
+        mostrarTaller={nombreModulo !== 'Inicio'}
+      />
 
       <header className="relative z-20 flex h-14 shrink-0 items-center justify-between px-[5vw] md:h-[4.5rem]">
         <button onClick={() => irAModulo(0)} aria-label="Ir al inicio">
