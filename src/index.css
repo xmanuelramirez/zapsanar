@@ -176,6 +176,22 @@
     }
   }
 
+  /* Funde una fotografia con el lienzo. Sin esto la foto se lee como un
+     rectangulo pegado encima y rompe la atmosfera del resto. */
+  .foto-fundida {
+    -webkit-mask-image: radial-gradient(
+      ellipse 74% 78% at 50% 44%,
+      #000 50%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 74% 78% at 50% 44%,
+      #000 50%,
+      transparent 100%
+    );
+    filter: saturate(0.93);
+  }
+
   .sin-arrastre {
     -webkit-user-drag: none;
     user-select: none;

@@ -1,9 +1,5 @@
 import { motion } from 'framer-motion'
-import FotoProducto from './FotoProducto'
 import { enlaceWhatsapp, sitio } from '../data/sitio'
-
-// Foto real del frasco de la marca. Vive en public/productos/.
-const PORTADA = 'productos/frasco.png'
 
 const SELLOS = ['Sin aditivos', 'Sin conservantes', 'Maceración lenta']
 
@@ -90,20 +86,24 @@ export default function Inicio({ activo, irAProductos }: Props) {
         </motion.div>
       </div>
 
-      {/* En movil la portada va arriba y se lleva un tercio de la pantalla: es
-          lo primero que se ve y tiene que ser la planta, no el texto. */}
+      {/* La portada ya no es un frasco suelto sino el taller donde se preparan.
+          La foto se funde con el lienzo por los bordes: como rectangulo pegado
+          encima rompia la atmosfera del resto de la pagina. El encuadre baja un
+          poco en escritorio para que quepan la cara y los frascos de la mesa. */}
       <motion.div
         initial={false}
-        animate={{ opacity: activo ? 1 : 0, scale: activo ? 1 : 0.96 }}
+        animate={{ opacity: activo ? 1 : 0, scale: activo ? 1 : 0.97 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="order-1 h-[32dvh] md:order-2 md:h-[78dvh] md:self-center"
+        className="relative order-1 h-[34dvh] md:order-2 md:h-auto"
       >
-        <FotoProducto
-          foto={PORTADA}
-          tono={['#F3EDE1', '#8A7A5E']}
-          alt="Frasco de tintura madre Zapsanar"
-          flotando
-          className="h-full w-full"
+        {/* Absoluta a proposito: en flujo, `h-full` contra una fila de altura
+            automatica hace que la imagen caiga en su proporcion propia y estire
+            la fila muy por encima del alto de la ventana. */}
+        <img
+          src={`${import.meta.env.BASE_URL}taller.webp`}
+          alt="El taller de Zapsanar: las tinturas madre se preparan a mano entre hierbas colgadas a secar"
+          draggable={false}
+          className="foto-fundida sin-arrastre absolute inset-0 h-full w-full object-cover object-[50%_25%] md:object-[50%_38%]"
         />
       </motion.div>
     </div>

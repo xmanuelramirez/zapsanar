@@ -1,4 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import Taller from './Taller'
 
 interface Props {
   /** Par [claro, profundo] del contexto activo: la planta abierta o el modulo */
@@ -112,6 +113,8 @@ export default function Fondo({ tono, foto }: Props) {
             transition={{ duration: p.dur, repeat: Infinity, ease: 'easeInOut' }}
           />
         ))}
+
+      <Taller />
 
       <div className="grano absolute inset-0" />
     </div>
